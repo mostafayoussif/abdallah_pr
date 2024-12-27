@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-cred = credentials.Certificate('C:\\Users\\A.T\\Desktop\\pr\\part\\gym0-83a26-firebase-adminsdk-sokxa-4305373246.json')
+cred = credentials.Certificate('C:\\Users\\MostafaPC\\Python_projects\\Abdallah\\pr\\part\\gym0-83a26-firebase-adminsdk-sokxa-4305373246.json')
 
 firebase_admin.initialize_app(cred,
 {

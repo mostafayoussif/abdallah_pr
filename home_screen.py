@@ -50,16 +50,23 @@ def all_trainers():
         get_all_trainers()
 
 def all_trainees():
-    fitness_trainers_frame.place_forget()
+    global refresh
+    i = 0
+    trainees_frame.place_forget()
     cardio_trainers_frame.place_forget()
     personal_trainers_frame .place_forget()
     body_building_trainers_frame.place_forget()
     trainees_frame.place_forget()
     feddback_frame.place_forget()
     trainees_name.place_forget()
-    trainers_name.grid_forget()
+    trainees_name.grid_forget()
     trainees_name.pack(padx = 50, pady = 150)
     options_frame.place(relx = 0.5, y = 940, anchor = 'center')
+    trainees_name.grid(row = 0, column = 0, padx = 50, pady = 50)
+    
+    if i < refresh:
+        print(i)
+        get_all_trainees()
 
 def home():
     fitness_trainers_frame.place(x = 1500, y = 250)
@@ -75,6 +82,7 @@ def home():
 def add_more_trainers():
     add_trainer_frame.place(x = 50, y = 860)
     add_trainer_name.place(x = 0, y = 0)
+
 
 
 
@@ -126,17 +134,18 @@ edit_trainer_wt.grid(row = 0, column = 2, padx = 20)
 
 edit_trainer_Mobile_phone = Entry(edit_trainer_frame, width = 120)
 edit_trainer_Mobile_phone.grid(row = 0, column = 3, padx = 20)
-
+#CTkComboBox
 edit_trainer_ex_t = CTkComboBox(edit_trainer_frame, width = 100)
 edit_trainer_ex_t.grid(row = 0, column = 5, padx = 20)
+
 
 #--- edit trainee-----
 edit_trainee_frame = Top_Frame(root,width = 1770)
 
 edit_trainee_name = Entry(edit_trainee_frame, width = 400)
-edit_trainee_name.grid(row = 0, column = 1, padx = 20)
+edit_trainee_name.grid(row = 0, column = 0, padx = 20)
 
-edit_trainee_nowd = Entry(edit_trainee_frame, width = 30)
+edit_trainee_nowd = Entry(edit_trainee_frame, width = 50)
 edit_trainee_nowd.grid(row = 0, column = 1, padx = 20)
 
 edit_trainee_wt = Entry(edit_trainee_frame, width = 70)
@@ -145,17 +154,17 @@ edit_trainee_wt.grid(row = 0, column = 2, padx = 20)
 edit_trainee_Mobile_phone = Entry(edit_trainee_frame, width = 120)
 edit_trainee_Mobile_phone.grid(row = 0, column = 3, padx = 20)
 
-edit_trainee_ex_t = CTkComboBox(edit_trainee_frame, width = 100)
-edit_trainee_ex_t.grid(row = 0, column = 5, padx = 20)
+edit_trainee_ex_t = Entry(edit_trainee_frame, width = 100)
+edit_trainee_ex_t.grid(row = 0, column = 4, padx = 20)
 
 
 
 
 j = 0
-for i in range (0, 20):
-    label = Small_Label(trainees_name, fg_color = '#4F0000', text = 'Ali Nagy', text_color = 'white', font = ('Cairo Black', 15))
-    label.grid(row = j, column = 0, padx = 1500, pady = 10)
-    j += 1
+#for i in range (0, 20):
+#    label = Small_Label(trainees_name, fg_color = '#4F0000', text = 'Ali Nagy', text_color = 'white', font = ('Cairo Black', 15))
+#    label.grid(row = j, column = 0, padx = 1500, pady = 10)
+#    j += 1
 
 def get_name_by_click(d):
     name = d
@@ -174,6 +183,7 @@ def delete_trainer(trainer_name, tb, tu, td):
         pass
 
 def update_trainer(t_name, trainer_gender, ex_type, dn, tow, mp, s):
+    print(f"Updating trainer: {t_name}, {trainer_gender}, {ex_type}, {dn}, {tow}, {mp}, {s}")
     edit_trainer_frame.grid()
 
 
@@ -224,9 +234,9 @@ def get_all_trainers():
 def get_all_trainees():
     j = 0
     button_numbera = 1
-    data = db.reference('members/trainee').get()
+    data = db.reference('members/trainees').get()
     for trainee in data.keys():
-        trainee_data = db.reference(f'members/trainee/{trainee}').get()
+        trainee_data = db.reference(f'members/trainees/{trainee}').get()
         data_frame = Data_Frame(trainees_name)
         data_frame.grid(row = j, pady = 10)
 
@@ -239,21 +249,20 @@ def get_all_trainees():
         gender = Data_Label(data_frame, width = 150, text = trainee_data['Gender'])
         gender.grid(row = j, column = 2, padx = 0)
 
-        nowd = Data_Label(data_frame, width = 80, text = trainee_data['NOWD'])
-        nowd.grid(row = j, column = 3, padx = 20)
+        bmi = Data_Label(data_frame, width = 80, text = trainee_data['BMI'])
+        bmi.grid(row = j, column = 3, padx = 20)
 
-        wt = Data_Label(data_frame, width = 80, text = trainee_data['WT'])
-        wt.grid(row = j, column = 4, padx = 20)
+
 
         mobile_phone = Data_Label(data_frame, width = 150, text = trainee_data['Mobile phone'])
-        mobile_phone.grid(row = j, column = 5, padx = 20)
+        mobile_phone.grid(row = j, column = 4, padx = 20)
 
-        status = Data_Label(data_frame, width = 120, text = trainee_data['Status'])
-        status.grid(row = j, column = 6, padx = 20)
+       # status = Data_Label(data_frame, width = 120, text = trainee_data['Status'])
+       # status.grid(row = j, column = 6, padx = 20)
         
         update_trainee_button = Operation_Button(trainees_name, text = 'update',
-                                                 command = lambda t_name = name, trainee_gender = gender, ex_type = et, dn = nowd, tow = wt, mp = mobile_phone, s = status: 
-                                                 update_trainee(t_name, trainee_gender, ex_type, dn, tow, mp, s))
+                                                 command = lambda t_name = name, trainee_gender = gender, ex_type = et, trainee_bmi = bmi, mp = mobile_phone: 
+                                                 update_trainee(t_name, trainee_gender, ex_type, trainee_bmi, mp))
         update_trainee_button.grid(row = j, column = 1, padx = 10)
         delete_trainee_button = Operation_Button(trainees_name, text = 'delete',
                                                  command = lambda name = trainee, trainee_button = data_frame : delete_trainee(name, trainee_button))
@@ -272,7 +281,12 @@ def delete_trainee(trainee_name, tb, tu, td):
     else:
         pass
 
-def update_trainee(t_name, trainee_gender, ex_type, dn, tow, mp, s):
+def update_trainee(t_name, trainee_gender, ex_type, trainee_bmi,  mp):
+    edit_trainee_name.insert(0, t_name.cget("text"))
+    edit_trainee_nowd.insert(0, trainee_bmi.cget("text"))
+    edit_trainee_wt.insert(0, trainee_bmi.cget("text"))
+    edit_trainee_Mobile_phone.insert(0, mp.cget("text"))
+    edit_trainee_ex_t.insert(0, ex_type.cget("text"))
     edit_trainee_frame.grid()
 
 
